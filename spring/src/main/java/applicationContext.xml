@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+   http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+   http://www.springframework.org/schema/context      
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+   
+   	<context:annotation-config/>
+    <bean name="c" class="test.Category">
+        <property name="name" value="category 1" />
+    </bean>
+    
+    <!-- prototype :每次从容器中调用Bean时，都返回一个新的实例，即每次调用getBean()时，相当于执行newXxxBean() -->
+    <bean name="mes" class="test.HelloSpring" scope="prototype">
+    	<property name="message" value="hellospring"></property>
+    </bean>
+    
+    <!-- singleton 单例作用域，在该bean中有且仅有一个实例 bean的默认作用域-->
+    <bean id="mes2" class="test.HelloSpring" scope="singleton"></bean>
+    
+    <!-- Spring bean生命周期，通过xml配置 -->
+    <bean name="mes3" class="test.HelloSpring" init-method="init" destroy-method="destroy">
+    	<property name="message" value="wdnmd"></property>
+    </bean>
+    
+    <bean name="p2" class="test.Product">
+        <!--  <property name="category" ref="c" />-->
+        <property name="name" value="product 2"></property>
+    </bean>
+    
+    <!-- 基于构造函数的依赖注入 -->
+	<bean name="textEditor" class="test.TextEditor">
+   		<constructor-arg ref="spellChecker"></constructor-arg>
+   </bean>
+   <bean name="spellChecker" class="test.SpellChecker"></bean>
+   
+   <!-- 基于设值函数的依赖注入 -->
+   <bean name="textEditor2" class="test.TextEditor">
+   		<property name="spellChecker">
+   			<bean name="spellChecker" class="test.SpellChecker"></bean>
+   		</property>
+   </bean>
+   
+    <!-- <context:component-scan base-package="test"/> -->
+    <!-- 告诉Spring，bean都放在test这个包下 -->
+    <bean name="pf" class="springAOP.ProformanceService"/>
+    <bean id="TimeAspect" class="springAOP.TimeAspect"/>
+    <aop:config>
+        <aop:pointcut id="TimerCutpoint"
+            expression=
+            "execution(* springAOP.ProformanceService.*(..)) "/>
+             
+        <aop:aspect id="timeAspect" ref="TimeAspect">
+            <aop:around pointcut-ref="TimerCutpoint" method="timer"/>
+        </aop:aspect>
+    </aop:config>
+    
+    <context:component-scan base-package="springAOP"/>
+    <context:component-scan base-package="springAOP"/>
+    <!-- 扫描包，定位业务类和切面类 --> 
+    
+    <aop:aspectj-autoproxy/>
+    <!-- 找到被注解了的切面类，进行切面配置 -->      
+ 
+</beans>

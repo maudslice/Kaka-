@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>day08</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>commentServlet</display-name>
+    <servlet-name>commentServlet</servlet-name>
+    <servlet-class>web.CommentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>commentServlet</servlet-name>
+    <url-pattern>/comment</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>commentFilter</filter-name>
+    <filter-class>web.CommentFilter</filter-class>
+    <init-param>
+      <param-name>illegal</param-name>
+      <param-value>狗</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>commentFilter</filter-name>
+    <url-pattern>/comment</url-pattern>
+  </filter-mapping>
+  <filter>
+    <display-name>commentNumFilter</display-name>
+    <filter-name>commentNumFilter</filter-name>
+    <filter-class>web.CommentNumFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>commentNumFilter</filter-name>
+    <url-pattern>/comment</url-pattern>
+  </filter-mapping>
+</web-app>
